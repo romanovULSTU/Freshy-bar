@@ -71,7 +71,7 @@
                                     <p class="cocktail__size">300мл</p>
                                 </div>
 
-                                <button class="btn cocktail__btn">Добавить</button>
+                                <button class="btn cocktail__btn cocktail__btn_make">Добавить</button>
                             </div>
                         </article>
                     </li>
@@ -98,8 +98,8 @@
         </div>
     </footer>
 
-    <div class="modal modal-order">
-        <div class="modal__main">
+    <div class="modal modal_order">
+        <div class="modal__main modal__main_order">
             <div class="order">
                 <h2 class="order__title">Корзина<sup class="text-red order__count">(2)</sup>
                 </h2>
@@ -143,7 +143,7 @@
                 </ul>
                 <div class="order__price">
                     <p class="order__price-title">Итого:</p>
-                    <p class="order__total-price">950&nbsp;₽</p>
+                    <p class="order__total-price text-red">950&nbsp;₽</p>
                 </div>
 
                 <form class="order__form">
@@ -161,9 +161,128 @@
         </div>
     </div>
 
-    <div class="modal modal-choto">
-        <div class="modal__main">
+    <div class="modal modal_make-your-own">
+        <div class="modal__main modal__main_make">
+            <div class="make">
+                <h3 class="make__title">Собери
+                    <span class="text-red">свой</span> смузи
+                </h3>
 
+                <form class="make__form make__form_make-your-own">
+                    <fieldset class="make__fieldset make__fieldset_ingredients">
+                        <label class="make__label checkbox">
+                            <input type="checkbox" class="checkbox__input" name="ingredients" value="Клубника">Клубника
+                        </label>
+
+                        <label class="make__label checkbox">
+                            <input type="checkbox" class="checkbox__input" name="ingredients" value="Банан">Банан
+                        </label>
+
+                        <label class="make__label checkbox">
+                            <input type="checkbox" class="checkbox__input" name="ingredients" value="Манго"> Манго
+                        </label>
+
+                        <label class="make__label checkbox">
+                            <input type="checkbox" class="checkbox__input" name="ingredients" value="Киви">Киви
+                        </label>
+
+                        <label class="make__label checkbox">
+                            <input type="checkbox" class="checkbox__input" name="ingredients" value="Маракуйя">Маракуйя
+                        </label>
+
+                        <label class="make__label checkbox">
+                            <input type="checkbox" class="checkbox__input" name="ingredients" value="Яблоко">Яблоко
+                        </label>
+                    </fieldset>
+
+                    <div class="make__wrap-add">
+                        <fieldset class="make__fieldset make__fieldset_topping">
+                            <legend class="make__legend">Дополнительно:</legend>
+                            <label class="make__label checkbox">
+                                <input type="checkbox" class="checkbox__input" name="topping" value="Мята">Мята
+                                <span class="make__upsale">(+50 ₽)</span>
+                            </label>
+    
+                            <label class="make__label checkbox">
+                                <input type="checkbox" class="checkbox__input" name="topping" value="Лед">Лед
+                                <span class="make__upsale">(+10 ₽)</span>
+                            </label>
+                        </fieldset>
+    
+                        <fieldset class="make__fieldset make__fieldset_cup">
+                            <legend class="make__legend">Стакан:</legend>
+                            <label class="make__label radio">
+                                <input type="radio" class="radio__input" name="cup" value="Биоразлагаемый">Биоразлагаемый
+                                <span class="make__upsale">(+20 ₽)</span>
+                            </label>
+    
+                            <label class="make__label radio">
+                                <input type="radio" class="radio__input" name="cup" value="Пластиковый">Пластиковый
+                                <span class="make__upsale">(+0 ₽)</span>
+                            </label>
+                        </fieldset>
+                    </div>
+                    
+
+                    <div class="make__footer">
+                        <button class="btn make__add-btn" type="submit">Добавить</button>
+
+                        <div class="make__total">
+                            <input class="make__input make__input_price" type="hidden" name="price" value="150">
+                            <p class="make__total-price text-red">150 ₽</p>
+                            <p class="make__total-size">300мл</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal_add">
+        <div class="modal__main modal__main_make">
+            <div class="make">
+                <h3 class="make__title">Банановый смузи</h3>
+
+                <form class="make__form make__form_add">
+                    <div class="make__wrap-add">
+                        <fieldset class="make__fieldset make__fieldset_topping">
+                            <legend class="make__legend">Дополнительно:</legend>
+                            <label class="make__label checkbox">
+                                <input type="checkbox" class="checkbox__input" name="topping" value="Мята">Мята
+                                <span class="make__upsale">(+50 ₽)</span>
+                            </label>
+    
+                            <label class="make__label checkbox">
+                                <input type="checkbox" class="checkbox__input" name="topping" value="Лед">Лед
+                                <span class="make__upsale">(+10 ₽)</span>
+                            </label>
+                        </fieldset>
+    
+                        <fieldset class="make__fieldset make__fieldset_cup">
+                            <legend class="make__legend">Стакан:</legend>
+                            <label class="make__label radio">
+                                <input type="radio" class="radio__input" name="cup" value="Биоразлагаемый">Биоразлагаемый
+                                <span class="make__upsale">(+20 ₽)</span>
+                            </label>
+    
+                            <label class="make__label radio">
+                                <input type="radio" class="radio__input" name="cup" value="Пластиковый">Пластиковый
+                                <span class="make__upsale">(+0 ₽)</span>
+                            </label>
+                        </fieldset>
+                    </div>
+                    
+
+                    <div class="make__footer">
+                        <button class="btn make__add-btn" type="submit">Добавить</button>
+
+                        <div class="make__total">
+                            <p class="make__total-price text-red">340 ₽</p>
+                            <p class="make__total-size">300мл</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </body>
