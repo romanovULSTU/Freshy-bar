@@ -66,7 +66,7 @@ const scrollService = {
     },
 };
 
-const modalController = ({ modal, btnOpen, time = 300 }) => {
+const modalController = ({ modal, btnOpen, time = 300, open, close }) => {
     const buttonElems = document.querySelectorAll(btnOpen);
     const modalElem = document.querySelector(modal);
 
@@ -87,13 +87,20 @@ const modalController = ({ modal, btnOpen, time = 300 }) => {
             setTimeout(() => {
                 modalElem.style.visibility = "hidden";
                 scrollService.enabledScroll();
+
+                if (close) {
+                    close();
+                }
             }, time);
 
             window.removeEventListener('keydown', closeModal);
         }
     };
 
-    const openModal = () => {
+    const openModal = (e) => {
+        if (open) {
+            open({ btn: e.target });
+        }
         modalElem.style.visibility = "visible";
         modalElem.style.opacity = 1;
         window.addEventListener('keydown', closeModal);
@@ -132,15 +139,15 @@ const calculateTotalPrice = (form, startPrice) => {
 
     const data = getFormData(form);
 
-    if (Array.isArray(data.ingredients)){
-        data.ingredients.forEach(item => {
+    if (Array.isArray(data.ingredients)) {
+        data.ingredients.forEach((item) => {
             totalPrice += price[item] || 0;
         })
     } else {
         totalPrice += price[data.ingredients] || 0;
     }
 
-    if (Array.isArray(data.topping)){
+    if (Array.isArray(data.topping)) {
         data.topping.forEach(item => {
             totalPrice += price[item] || 0;
         })
@@ -148,9 +155,9 @@ const calculateTotalPrice = (form, startPrice) => {
         totalPrice += price[data.topping] || 0;
     }
 
-        totalPrice += price[data.cup] || 0;
+    totalPrice += price[data.cup] || 0;
 
-        return totalPrice;
+    return totalPrice;
 }
 
 const calculateMakeYourOwn = () => {
@@ -166,6 +173,47 @@ const calculateMakeYourOwn = () => {
 
     formMakeOwn.addEventListener('change', handlerChange);
     handlerChange();
+};
+
+const calculateAdd = () => {
+    const modalAdd = document.querySelector('.modal_add');
+    const formAdd = document.querySelector('.make__form_add');
+    const makeTitle = modalAdd.querySelector('.make__title');
+    const makeInputStartPrice = modalAdd.querySelector('.make__input-start-price')
+    const makeInputTitle = modalAdd.querySelector('.make__input-title');
+    const makeInputPrice = modalAdd.querySelector('.make__input-price');
+    const makeTotalPrice = modalAdd.querySelector('.make__total-price');
+    const makeInputSize = modalAdd.querySelector('.make__input-size');
+    const makeTotalSize = modalAdd.querySelector('.make__total-size');
+
+    const handlerChange = () => {
+        const totalPrice = calculateTotalPrice(formAdd, +makeInputStartPrice.value);
+        makeTotalPrice.textContent = `${totalPrice}  ₽`;
+        makeInputPrice.value = totalPrice;
+    };
+
+    formAdd.addEventListener('change', handlerChange);
+
+    const fillInForm = (data) => {
+        
+        makeTitle.textContent = data.title;
+        makeInputTitle.value = data.title;
+        makeTotalPrice.textContent = `${data.price} ₽`;
+        makeInputStartPrice.value = data.price;
+        makeInputPrice.value = data.price;
+        makeTotalSize.textContent = data.size;
+        makeInputSize.value = data.size;
+        handlerChange();
+    };
+
+    const resetForm = () => {
+        makeTitle.textContent = "";
+        makeTotalPrice.textContent = "";
+        makeTotalSize.textContent = "";
+        formAdd.reset();
+    };
+
+    return { fillInForm, resetForm };
 }
 
 const init = async () => {
@@ -194,9 +242,17 @@ const init = async () => {
     })
     goodsListElem.append(...cartsCocktail);
 
+    const { fillInForm, resetForm } = calculateAdd();
+
     modalController({
         modal: ".modal_add",
         btnOpen: ".cocktail__btn_add",
+        open({ btn }) {
+            const id = btn.dataset.id;
+            const item = data.find((item) => item.id.toString() === id);
+            fillInForm(item);
+        },
+        close: resetForm,
     })
 };
 
