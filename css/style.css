@@ -94,6 +94,11 @@ fieldset {
     box-shadow: 0px 4px 20px 0px #FA5A5A;
 }
 
+.btn:disabled {
+    background-color: #C1C1C1;
+    box-shadow: none;
+}
+
 .text-red {
     color: #F44
 }
@@ -436,7 +441,7 @@ fieldset {
     font-size: 44px;
     font-weight: 900;
     margin-bottom: 40px;
-}   
+}
 
 .make__form {
     display: flex;
@@ -532,7 +537,7 @@ fieldset {
     display: block;
     border-radius: 2px;
     background-color: #fff;
-    
+
 }
 
 .checkbox__input:after {
@@ -567,13 +572,9 @@ fieldset {
     outline: none;
 }
 
-.radio {
+.radio {}
 
-}
-
-.radio__input {
-
-}
+.radio__input {}
 
 
 
