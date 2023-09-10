@@ -25,7 +25,7 @@ const cartDataControl = {
     },
     remove(idls) {
         const cartData = this.get();
-        const index = cartData.findIndex((item) => item.idls === idls);
+        const index = cart.findIndex((item) => item.idls === idls);
         if (index !== -1) {
             cartData.splice(index, 1);
         }
@@ -162,7 +162,6 @@ const calculateTotalPrice = (form, startPrice) => {
     let totalPrice = startPrice;
 
     const data = getFormData(form);
-    console.log('data: ', data);
 
     if (Array.isArray(data.ingredients)) {
         data.ingredients.forEach((item) => {
@@ -258,7 +257,7 @@ const calculateAdd = () => {
 
     formAdd.addEventListener('change', handlerChange);
     formControl(formAdd, () => {
-        modalAdd.closest('close');
+        modalAdd.closeModal('close');
     })
 
     const fillInForm = (data) => {
@@ -281,15 +280,101 @@ const calculateAdd = () => {
     };
 
     return { fillInForm, resetForm };
+};
+
+const createCartItem = (item) => {
+    const li = document.createElement('li');
+    li.classList.add('order__item');
+    li.innerHTML = `
+        <img src="img/berries.jpg" class="order__img" alt="${item.title}">
+        <div class="order__info">
+            <h3 class="order__name">${item.title}</h3>
+
+            <ul class="order__topping-list">
+                <li class="order__topping-item">${item.size}</li>
+                <li class="order__topping-item">${item.cup}</li>
+                ${
+                    item.topping 
+                        ? (Array.isArray(item.topping)
+                            ?   item.topping.map(
+                                    (topping) => 
+                                        `<li class="order__topping-item">${topping}</li>`
+                                )
+                            : `<li class="order__topping-item">${item.topping}</li>`)
+                        : ""
+                }    
+            </ul>
+        </div>
+        <button class="order__item-delete" data-idls="${item.idls}"
+            aria-label="Удалить коктейль из корзины"></button>
+
+        <p class="order__item-price">${item.price}&nbsp;₽</p>
+    `;
+
+    return li;
 }
+
+const renderCart = () => {
+    const modalOrder = document.querySelector('.modal_order');
+
+    const orderCount = modalOrder.querySelector('.order__count');
+    const orderList = modalOrder.querySelector('.order__list');
+    const orderTotalPrice = modalOrder.querySelector('.order__total-price');
+    const orderForm = modalOrder.querySelector('.order__form');
+
+    const orderListData = cartDataControl.get();
+
+    orderList.textContent = "";
+    orderCount.textContent = `(${orderListData.length})`;
+
+    orderListData.forEach((item) => {
+        orderList.append(createCartItem(item));
+    });
+
+    orderTotalPrice.textContent =
+        `${orderListData.reduce(
+            (acc, item) => acc + +item.price,
+            0,
+            )} ₽`;
+
+    orderForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if(!orderListData.length) {
+            alert('Корзина пустая');
+            orderForm.reset();
+            modalOrder.closeModal('close');
+            return;
+        }
+
+        const data = getFormData(orderForm);
+        const response = await fetch(`${API_URL}api/order`, {
+            method: 'POST',
+            body: JSON.stringify({
+                ...data,
+                products: orderListData,
+            }),
+            headers: {
+                "Content-Type": 'application/json'
+            }
+
+        });
+
+        const { message } = await response.json();
+        alert(message);
+        cartDataControl.clear();
+        orderForm.reset();
+        modalOrder.closeModal('close');
+    });
+};
 
 const init = async () => {
     modalController({
         modal: ".modal_order",
         btnOpen: ".header__btn-order",
+        open: renderCart,
     });
 
-    const { resetForm: resetFormMakeYourOwn} = calculateMakeYourOwn();
+    const { resetForm: resetFormMakeYourOwn } = calculateMakeYourOwn();
 
     modalController({
         modal: '.modal_make-your-own',
